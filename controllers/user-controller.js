@@ -68,6 +68,25 @@ const userController = {
         })
     },
 
+    // delete user
+    deleteUser({ params }, res) {
+        User.findOneAndDelete(
+            { _id: params.id },
+            { new: true }
+        )
+        .then((dbUserData) => {
+            if(!dbUserData) {
+                res.status(404).json({ message: 'No user is found with this id!' });
+                return;
+            }
+            res.json(dbUserData)
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(400).json(err);
+        })
+    },
+
     // add friend
     addFriend({ params, }, res) {
         User.findOneAndUpdate(
@@ -108,3 +127,5 @@ const userController = {
         })
     }
 }
+
+module.exports = userController;
